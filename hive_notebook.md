@@ -36,3 +36,60 @@ alter table table_name drop if exists partitions(d='2016-07-01');
 # 复合数据类型
 # struct, array, map
 ```
+# 复合数据类型
+```
+# array
+create table person(name string,work_locations array<string>)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+# 数据
+biansutao beijing,shanghai,tianjin,hangzhou
+linan changchu,chengdu,wuhan
+# 入库数据
+LOAD DATA LOCAL INPATH '/home/hadoop/person.txt' OVERWRITE INTO TABLE person;
+select * from person;
+# biansutao ["beijing","shanghai","tianjin","hangzhou"]
+# linan ["changchu","chengdu","wuhan"]
+
+# map
+create table score(name string,score map<string,int>)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+COLLECTION ITEMS TERMINATED BY ','
+MAP KEYS TERMINATED BY ':';
+# 数据
+biansutao '数学':80,'语文':89,'英语':95
+jobs '语文':60,'数学':80,'英语':99
+# 入库数据
+LOAD DATA LOCAL INPATH '/home/hadoop/score.txt' OVERWRITE INTO TABLE score;
+# biansutao {"数学":80,"语文":89,"英语":95}
+# jobs {"语文":60,"数学":80,"英语":99}
+  
+# struct
+CREATE TABLE test(id int,course struct<course:string,score:int>)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+# 数据
+1 english,80
+2 math,89
+3 chinese,95
+# 入库
+LOAD DATA LOCAL INPATH '/home/hadoop/test.txt' OVERWRITE INTO TABLE test;
+# 查询
+select * from test;
+# 1  {"course":"english","score":80}
+# 2  {"course":"math","score":89}
+# 3  {"course":"chinese","score":95}
+```
+
+# 配置优化
+```
+# 开启任务并行执行
+set hive.exec.parallel=true
+# 设置运行内存
+set mapreduce.map.memory.mb=1024;
+set mapreduce.reduce.memory.mb=1024;
+# 指定队列
+set mapreduce.job.queuename=jppkg_high;
+# 动态分区，为了防止一个reduce处理写入一个分区导致速度严重降低，下面需设置为false
+# 默认为true

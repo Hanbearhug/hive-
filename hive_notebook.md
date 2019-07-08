@@ -93,3 +93,4 @@ set mapreduce.reduce.memory.mb=1024;
 set mapreduce.job.queuename=jppkg_high;
 # 动态分区，为了防止一个reduce处理写入一个分区导致速度严重降低，下面需设置为false
 # 默认为true
+

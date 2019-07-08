@@ -94,3 +94,12 @@ set mapreduce.job.queuename=jppkg_high;
 # 动态分区，为了防止一个reduce处理写入一个分区导致速度严重降低，下面需设置为false
 # 默认为true
 
+# 稍微复杂的用法
+```
+# 对json格式解析并分别命名列名，使用lateral view+json_tuple实现
+select analysis_josn.* from
+main_table lateral view json_tuple(main_table,'key1','key2','key3') analysis_json
+as key1,key2,key3
+```
+# 动态分区，为了防止一个reduce处理写入一个分区导致速度严重降低，下面需设置为falsejosn
+# 动态分区，为了防止一个reduce处理写入一个分区导致速度严重降低，下面需设置为false

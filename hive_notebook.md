@@ -107,3 +107,9 @@ as key1,key2,key3
 # 关于性能优化
 
 order by 由于是全局排序的，所以只能在一个reduce进行操作，因此如果当数据量太大的时候，不要轻易使用order by，这样的话会使大量的数据都跑到一个reduce中运行，如果reduce内存比较小，可能会报内存溢出，即便内存很大，也会花费很长时间，并且不管配置了有多少个reduce，都只会使用一个reduce。sort by 则是每一个reduce中排序，可能对应有多个reduce。血泪教训。。。大数据量千万不要order by。　　
+
+# 设置运行引擎
+```
+set hive.execution.engine=mr -- mapreduce计算引擎（默认）
+set hive.execution.engine=spark; -- spark计算引擎
+```

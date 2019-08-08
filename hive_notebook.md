@@ -113,3 +113,22 @@ order by 由于是全局排序的，所以只能在一个reduce进行操作，�
 set hive.execution.engine=mr -- mapreduce计算引擎（默认）
 set hive.execution.engine=spark; -- spark计算引擎
 ```
+
+
+# row_number()over、lag、lead函数解析  
+根据工资排序生成排序数字
+```
+select id,name,age,salary,row_number()over(order by salary desc) rn
+from TEST_ROW_NUMBER_OVER t
+```
+根据id分组后进行排序数字生成
+```
+select id,name,age,salary,row_number()over(partition by id order by salary desc) rank
+from TEST_ROW_NUMBER_OVER t
+```
+
+lag(字段名,N) over(partition by 分组字段 order by 排序字段 排序方式). 
+字段含义为取分组排序后比该记录序号小N的记录对应指定字段的值。
+
+lead(字段名,N) over(partition by 分组字段 order by 排序字段 排序方式)  
+字段含义为取分组排序后比该记录序号大N的记录对应指定字段的值

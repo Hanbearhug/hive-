@@ -132,3 +132,22 @@ lag(字段名,N) over(partition by 分组字段 order by 排序字段 排序方�
 
 lead(字段名,N) over(partition by 分组字段 order by 排序字段 排序方式)  
 字段含义为取分组排序后比该记录序号大N的记录对应指定字段的值
+
+# 窗口函数对比
+链接：https://www.cnblogs.com/damahuhu/p/12009182.html
+```
+with tmp as
+(
+select null as col1
+union all
+select 1 as col1
+union all
+select 2 as col1
+)
+select avg(col1) avg_numm, sum(col1) sum_num, count(1) cnt, count(col1) cnt_col1
+from tmp
+```
+结果
+```
+1.5	3	3	2
+```
